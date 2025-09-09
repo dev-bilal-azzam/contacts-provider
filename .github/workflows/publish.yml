@@ -3,11 +3,11 @@ name: Publish to Maven Central
 on:
   push:
     branches:
-      - master   # runs only when pushing to master
+      - master
 
 jobs:
   publish:
-    runs-on: macos-latest   # macOS needed for iOS targets
+    runs-on: macos-latest
 
     steps:
       - name: Checkout sources
