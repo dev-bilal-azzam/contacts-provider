@@ -10,7 +10,10 @@ plugins {
 }
 
 group = "io.github.dev-bilal-azzam"
-version = "1.0.4"
+version = providers.exec {
+    commandLine("git", "describe", "--tags", "--abbrev=0")
+}.standardOutput.asText.get().trim()
+
 
 kotlin {
     androidTarget {
