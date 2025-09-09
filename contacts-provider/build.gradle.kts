@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -11,7 +10,7 @@ plugins {
 }
 
 group = "io.github.dev-bilal-azzam"
-version = "1.0.3"
+version = "1.0.4"
 
 kotlin {
     androidTarget {
