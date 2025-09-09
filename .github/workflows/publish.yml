@@ -22,15 +22,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v3
 
-      - name: Bump version and create tag
-        run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 || echo "1.0.0")
-          echo "Latest tag: $LATEST_TAG"
-          NEXT_TAG=$(echo $LATEST_TAG | awk -F. -v OFS=. '{$NF++; print}')
-          echo "Next tag: $NEXT_TAG"
-          git tag $NEXT_TAG
-          git push origin $NEXT_TAG
-
       - name: Publish to Maven Central
         run: ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
         env:
