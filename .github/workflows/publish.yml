@@ -1,0 +1,36 @@
+name: Publish to Maven Central
+
+on:
+  push:
+    branches:
+      - master   # runs only when pushing to master
+
+jobs:
+  publish:
+    runs-on: macos-latest   # macOS needed for iOS targets
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.SIGNING_KEY }}" | base64 --decode | gpg --batch --import
+          gpg --list-secret-keys
+
+      - name: Publish
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        run: ./gradlew publishToMavenCentral --no-configuration-cache --stacktrace
