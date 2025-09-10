@@ -1,6 +1,6 @@
 # Contacts Provider (Kotlin Multiplatform)
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-blue.svg)](https://kotlinlang.org/)  
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2.10-blue.svg)](https://kotlinlang.org/)  
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-purple.svg)](https://www.jetbrains.com/lp/compose/)  
 
 A **Kotlin Multiplatform library** to fetch user contacts from **Android** and **iOS** with a **Compose-friendly API**. Provides names, initials, phone numbers, and avatars, with minimal setup.
@@ -24,12 +24,13 @@ A **Kotlin Multiplatform library** to fetch user contacts from **Android** and *
 ## Installation
 
 ### Gradle
+
+ [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/contacts-provider?label=latest_version)](https://github.com/dev-bilal-azzam/contacts-provider/releases/latest)
 ```kotlin
 dependencies {
     implementation("io.github.dev-bilal-azzam:contacts-provider:$latest_version")
 }
 ```
-You can find Latest Version Here [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/contacts-provider?label=latest)](https://github.com/dev-bilal-azzam/contacts-provider/releases/latest)
 
 
 ## Usage
