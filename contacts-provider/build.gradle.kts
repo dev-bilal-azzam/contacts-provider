@@ -103,6 +103,12 @@ mavenPublishing {
                 name = "Bilal Azzam"
                 url = "https://www.linkedin.com/in/dev-bilal-azzam/"
             }
+
+            developer {
+                id = "Radwa85"
+                name = "Radwa Mohamed"
+                url = "https://www.linkedin.com/in/radwa-mohamed-250215288/"
+            }
         }
         scm {
             url = "https://github.com/dev-bilal-azzam/contacts-provider/"
