@@ -101,7 +101,11 @@ mavenPublishing {
             developer {
                 id = "dev-bilal-azzam"
                 name = "Bilal Azzam"
-                url = "bilal.mohammed.azzam@gmail.com"
+                url = "https://www.linkedin.com/in/dev-bilal-azzam/"
+            }
+            developer {
+                id = "Radwa85"
+                name = "Radwa85"
             }
         }
         scm {
