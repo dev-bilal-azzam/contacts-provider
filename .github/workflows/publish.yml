@@ -11,6 +11,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup gradle.properties
+        run: |
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "android.nonTransitiveRClass=true" >> gradle.properties
+          echo "enableJetifier=true" >> gradle.properties
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
