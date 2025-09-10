@@ -89,7 +89,7 @@ mavenPublishing {
     pom {
         name = "Contacts Provider"
         description = "Library used to fetch all contacts from user's device for both android and ios."
-        inceptionYear = "2024"
+        inceptionYear = "2025"
         url = "https://github.com/dev-bilal-azzam/contacts-provider/"
         licenses {
             license {
@@ -102,10 +102,6 @@ mavenPublishing {
                 id = "dev-bilal-azzam"
                 name = "Bilal Azzam"
                 url = "https://www.linkedin.com/in/dev-bilal-azzam/"
-            }
-            developer {
-                id = "Radwa85"
-                name = "Radwa85"
             }
         }
         scm {
