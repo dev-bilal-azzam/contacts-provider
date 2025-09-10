@@ -2,11 +2,12 @@ package com.bilalazzam.contacts_provider
 
 import android.content.Context
 import android.provider.ContactsContract
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual class ContactsProvider(private val context: Context) {
-    actual suspend fun getAllContacts(): List<Contact> {
+class AndroidContactsProvider(private val context: Context): ContactsProvider {
+    override suspend fun getAllContacts(): List<Contact> = withContext(Dispatchers.IO) {
         val contacts = mutableListOf<Contact>()
         val resolver = context.contentResolver
 
@@ -67,6 +68,7 @@ actual class ContactsProvider(private val context: Context) {
                 )
             }
         }
-        return contacts
+
+        contacts
     }
 }

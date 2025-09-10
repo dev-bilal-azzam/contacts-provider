@@ -2,13 +2,15 @@ package com.bilalazzam.contacts_provider
 
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import platform.Contacts.*
 import platform.UIKit.UIImage
 
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
-actual class ContactsProvider {
+class IosContactsProvider: ContactsProvider {
     @OptIn(ExperimentalForeignApi::class)
-    actual suspend fun getAllContacts(): List<Contact> {
+    override suspend fun getAllContacts(): List<Contact> = withContext(Dispatchers.IO) {
         val store = CNContactStore()
         val keysToFetch = listOf(
             CNContactIdentifierKey,
@@ -41,7 +43,7 @@ actual class ContactsProvider {
             )
         }
 
-        return contacts
+        contacts
     }
 
     private fun CNContact.getPhoneNumbers(): List<String> {
