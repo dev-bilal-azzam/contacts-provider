@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.dev-bilal-azzam"
-version = "1.0.5"
+version = project.findProperty("version") as String? ?: "1.1.0"
 
 kotlin {
     androidTarget {
