@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.dev-bilal-azzam"
-version = "1.0.4"
+version = "1.0.5"
 
 kotlin {
     androidTarget {
@@ -88,7 +88,7 @@ mavenPublishing {
     pom {
         name = "Contacts Provider"
         description = "Library used to fetch all contacts from user's device for both android and ios."
-        inceptionYear = "2024"
+        inceptionYear = "2025"
         url = "https://github.com/dev-bilal-azzam/contacts-provider/"
         licenses {
             license {
