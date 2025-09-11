@@ -7,7 +7,7 @@ data class Contact(
     val id: String?,
     val firstName: String?,
     val lastName: String?,
-    val phoneNumbers: List<String>,
+    val phoneNumbers: List<String> = emptyList(),
     val avatar: ContactAvatar = ContactAvatar.None
 ) {
     val displayName: String

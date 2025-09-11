@@ -21,8 +21,12 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
     override suspend fun getAllContacts(fields: Set<ContactField>): List<Contact> =
         withContext(Dispatchers.IO) {
             val resolver = context.contentResolver
-
             val projection = fields.mapNotNull { fieldProjections[it] }.toTypedArray()
+            val phoneNumbersMap = if (ContactField.PHONE_NUMBERS in fields) {
+                getAllPhoneNumbers(resolver)
+            } else {
+                emptyMap()
+            }
 
             val cursor = resolver
                 .query(
@@ -34,19 +38,21 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
                 )
 
             // return contacts
-            cursor?.use {
+            cursor?.use { cursor ->
                 buildList {
-                    while (it.moveToNext()) {
-                        add(extractContact(it, resolver, fields))
+                    while (cursor.moveToNext()) {
+                        val contact = extractContact(cursor, fields)
+                        val contactWithPhoneNumbers = contact.copy(
+                            phoneNumbers = phoneNumbersMap[contact.id] ?: emptyList()
+                        )
+                        add(contactWithPhoneNumbers)
                     }
                 }
-
             } ?: emptyList()
         }
 
     private fun extractContact(
         cursor: Cursor,
-        resolver: ContentResolver,
         fields: Set<ContactField>
     ): Contact {
         val id = getValue(cursor, ContactField.ID, fields)
@@ -59,10 +65,6 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
             id = id,
             firstName = nameParts?.firstOrNull(),
             lastName = nameParts?.drop(1)?.joinToString(" "),
-            phoneNumbers = if (ContactField.PHONE_NUMBERS in fields)
-                getPhoneNumbers(resolver, id)
-            else
-                emptyList(),
             avatar = if (photoUri != null)
                 ContactAvatar.AvatarUri(photoUri)
             else
@@ -76,23 +78,30 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
         return cursor.getString(cursor.getColumnIndexOrThrow(column))
     }
 
-    private fun getPhoneNumbers(resolver: ContentResolver, contactId: String?): List<String> {
-        if (contactId != null) return emptyList()
+    private fun getAllPhoneNumbers(resolver: ContentResolver): Map<String, List<String>> {
+        val numbersByContact = mutableMapOf<String, MutableList<String>>()
 
-        val numbers = mutableListOf<String>()
         resolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
-            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
-            arrayOf(contactId),
+            arrayOf(
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ),
+            null,
+            null,
             null
         )?.use { cursor ->
+            val idIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+            val numberIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
             while (cursor.moveToNext()) {
-                numbers.add(
-                    cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                )
+                val contactId = cursor.getString(idIndex)
+                val number = cursor.getString(numberIndex)
+
+                numbersByContact.getOrPut(contactId) { mutableListOf() }.add(number)
             }
         }
-        return numbers
+
+        return numbersByContact
     }
 }
