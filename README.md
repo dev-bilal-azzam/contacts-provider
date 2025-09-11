@@ -33,6 +33,37 @@ dependencies {
 ```
 
 
+# ✨ What’s New in [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/contacts-provider?label=Latest_Release)](https://github.com/dev-bilal-azzam/contacts-provider/releases/latest)
+
+### 1. Customizable Fields  
+- Introduced **custom field selection** when fetching contacts.  
+- Users can now specify exactly which fields they need:
+  - **Phone numbers**  
+  - **Names (first - last)**  
+  - **Avatar **  
+- This avoids unnecessary queries and improves performance when only a subset of data is required.  
+
+```kotlin
+contactsProvider.getAllContacts(
+    fields = setOf(ContactField.ID, ContactField.FIRST_NAME)
+)
+```
+
+---
+
+### 2. 🚀 50× Performance Boost  
+- Optimized how **phone numbers** are fetched
+- Results:
+  - Before: ~10 seconds for large contact lists with phone numbers.  
+  - After: ~200 ms (same speed as fetching names only).  
+
+---
+
+## 📊 Benefits
+- **Faster**: Large contact lists now load up to **50× faster** when phone numbers are included.  
+- **Flexible**: Apps can now fetch only the fields they actually need.  
+---
+
 ## Usage
 
 ### Compose-friendly API
@@ -44,7 +75,13 @@ fun ContactsScreen() {
 
     LaunchedEffect(Unit) {
         // Ensure permission is granted
-        contacts = contactsProvider.getAllContacts()
+        contacts = contactsProvider.getAllContacts(
+            fields = setOf(
+                ContactField.ID,
+                ContactField.FIRST_NAME,
+                ContactField.PHONE_NUMBERS
+            )
+        )
     }
 
     LazyColumn {
