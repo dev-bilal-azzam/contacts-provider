@@ -1,74 +1,98 @@
 package com.bilalazzam.contacts_provider
 
+import android.content.ContentResolver
 import android.content.Context
+import android.database.Cursor
 import android.provider.ContactsContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-class AndroidContactsProvider(private val context: Context): ContactsProvider {
-    override suspend fun getAllContacts(): List<Contact> = withContext(Dispatchers.IO) {
-        val contacts = mutableListOf<Contact>()
-        val resolver = context.contentResolver
+class AndroidContactsProvider(private val context: Context) : ContactsProvider {
 
-        val projection = arrayOf(
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.Contacts.PHOTO_URI,
-            ContactsContract.Contacts.HAS_PHONE_NUMBER
-        )
+    private val fieldProjections = mapOf(
+        ContactField.ID to ContactsContract.Contacts._ID,
+        ContactField.FIRST_NAME to ContactsContract.Contacts.DISPLAY_NAME,
+        ContactField.LAST_NAME to ContactsContract.Contacts.DISPLAY_NAME,
+        ContactField.AVATAR to ContactsContract.Contacts.PHOTO_URI,
+        ContactField.PHONE_NUMBERS to ContactsContract.Contacts.HAS_PHONE_NUMBER
+    )
 
-        val cursor = resolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            projection, null, null, null
-        )
+    override suspend fun getAllContacts(fields: Set<ContactField>): List<Contact> =
+        withContext(Dispatchers.IO) {
+            val resolver = context.contentResolver
 
-        cursor?.use {
-            while (it.moveToNext()) {
-                val id = it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
-                val displayName =
-                    it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME))
-                        ?: ""
-                val photoUri =
-                    it.getString(it.getColumnIndexOrThrow(ContactsContract.Contacts.PHOTO_URI))
+            val projection = fields.mapNotNull { fieldProjections[it] }.toTypedArray()
 
-                val nameParts = displayName.trim().split("\\s+".toRegex())
-                val firstName = nameParts.firstOrNull() ?: ""
-                val lastName = nameParts.drop(1).joinToString(" ")
+            val cursor = resolver
+                .query(
+                    ContactsContract.Contacts.CONTENT_URI,
+                    projection,
+                    null,
+                    null,
+                    null
+                )
 
-                val phoneNumbers = mutableListOf<String>()
-                if (it.getInt(it.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    val phoneCursor = resolver.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
-                        arrayOf(id),
-                        null
-                    )
-                    phoneCursor?.use { pc ->
-                        while (pc.moveToNext()) {
-                            val number = pc.getString(
-                                pc.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                            )
-                            phoneNumbers.add(number)
-                        }
+            // return contacts
+            cursor?.use {
+                buildList {
+                    while (it.moveToNext()) {
+                        add(extractContact(it, resolver, fields))
                     }
                 }
 
-                val avatar = if (photoUri != null) ContactAvatar.AvatarUri(photoUri) else ContactAvatar.None
+            } ?: emptyList()
+        }
 
-                contacts.add(
-                    Contact(
-                        id = id,
-                        firstName = firstName,
-                        lastName = lastName,
-                        phoneNumbers = phoneNumbers,
-                        avatar = avatar
-                    )
+    private fun extractContact(
+        cursor: Cursor,
+        resolver: ContentResolver,
+        fields: Set<ContactField>
+    ): Contact {
+        val id = getValue(cursor, ContactField.ID, fields)
+        val displayName = getValue(cursor, ContactField.FIRST_NAME, fields)
+        val photoUri = getValue(cursor, ContactField.AVATAR, fields)
+
+        val nameParts = displayName?.trim()?.split("\\s+".toRegex())
+
+        return Contact(
+            id = id,
+            firstName = nameParts?.firstOrNull(),
+            lastName = nameParts?.drop(1)?.joinToString(" "),
+            phoneNumbers = if (ContactField.PHONE_NUMBERS in fields)
+                getPhoneNumbers(resolver, id)
+            else
+                emptyList(),
+            avatar = if (photoUri != null)
+                ContactAvatar.AvatarUri(photoUri)
+            else
+                ContactAvatar.None
+        )
+    }
+
+    private fun getValue(cursor: Cursor, field: ContactField, fields: Set<ContactField>): String? {
+        val column = fieldProjections[field] ?: return null
+        if (field !in fields) return null
+        return cursor.getString(cursor.getColumnIndexOrThrow(column))
+    }
+
+    private fun getPhoneNumbers(resolver: ContentResolver, contactId: String?): List<String> {
+        if (contactId != null) return emptyList()
+
+        val numbers = mutableListOf<String>()
+        resolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
+            arrayOf(contactId),
+            null
+        )?.use { cursor ->
+            while (cursor.moveToNext()) {
+                numbers.add(
+                    cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 )
             }
         }
-
-        contacts
+        return numbers
     }
 }

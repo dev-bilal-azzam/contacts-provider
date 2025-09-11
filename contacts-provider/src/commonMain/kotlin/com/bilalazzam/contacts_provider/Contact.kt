@@ -34,7 +34,7 @@ data class Contact(
 }
 
 sealed class ContactAvatar {
-    data class AvatarUri(val uri: String): ContactAvatar()
+    data class AvatarUri(val uri: String?): ContactAvatar()
     data class AvatarBitmap(val bitmap: ImageBitmap): ContactAvatar()
     data object None: ContactAvatar()
 
