@@ -20,35 +20,41 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
 
     override suspend fun getAllContacts(fields: Set<ContactField>): List<Contact> =
         withContext(Dispatchers.IO) {
-            val resolver = context.contentResolver
-            val projection = fields.mapNotNull { fieldProjections[it] }.toTypedArray()
-            val phoneNumbersMap = if (ContactField.PHONE_NUMBERS in fields) {
-                getAllPhoneNumbers(resolver)
-            } else {
-                emptyMap()
-            }
-
-            val cursor = resolver
-                .query(
-                    ContactsContract.Contacts.CONTENT_URI,
-                    projection,
-                    null,
-                    null,
-                    null
-                )
-
-            // return contacts
-            cursor?.use { cursor ->
-                buildList {
-                    while (cursor.moveToNext()) {
-                        val contact = extractContact(cursor, fields)
-                        val contactWithPhoneNumbers = contact.copy(
-                            phoneNumbers = phoneNumbersMap[contact.id] ?: emptyList()
-                        )
-                        add(contactWithPhoneNumbers)
-                    }
+            try {
+                val resolver = context.contentResolver
+                val projection = fields.mapNotNull { fieldProjections[it] }.toTypedArray()
+                val phoneNumbersMap = if (ContactField.PHONE_NUMBERS in fields) {
+                    getAllPhoneNumbers(resolver)
+                } else {
+                    emptyMap()
                 }
-            } ?: emptyList()
+
+                val cursor = resolver
+                    .query(
+                        ContactsContract.Contacts.CONTENT_URI,
+                        projection,
+                        null,
+                        null,
+                        null
+                    )
+
+                // return contacts
+                cursor?.use { cursor ->
+                    buildList {
+                        while (cursor.moveToNext()) {
+                            val contact = extractContact(cursor, fields)
+                            val contactWithPhoneNumbers = contact.copy(
+                                phoneNumbers = phoneNumbersMap[contact.id] ?: emptyList()
+                            )
+                            add(contactWithPhoneNumbers)
+                        }
+                    }
+                } ?: emptyList()
+            } catch (e: SecurityException) {
+                throw  ContactsPermissionDeniedException()
+            } catch (e: Exception) {
+                throw FetchContactsFailedException()
+            }
         }
 
     private fun extractContact(

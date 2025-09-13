@@ -30,28 +30,32 @@ class IosContactsProvider : ContactsProvider {
     @OptIn(ExperimentalForeignApi::class)
     override suspend fun getAllContacts(fields: Set<ContactField>): List<Contact> =
         withContext(Dispatchers.IO) {
-            val store = CNContactStore()
-            val keysToFetch = fields.mapNotNull { fieldProjections[it] }.toList()
-            val request = CNContactFetchRequest(keysToFetch = keysToFetch)
+            try {
+                val store = CNContactStore()
+                val keysToFetch = fields.mapNotNull { fieldProjections[it] }.toList()
+                val request = CNContactFetchRequest(keysToFetch = keysToFetch)
 
-            // return contacts
-            buildList {
-                store.enumerateContactsWithFetchRequest(request, error = null) { cnContact, _ ->
-                    cnContact?.let {
-                        add(
-                            Contact(
-                                id = getValue(cnContact, ContactField.ID, fields),
-                                firstName = getValue(cnContact, ContactField.FIRST_NAME, fields),
-                                lastName = getValue(cnContact, ContactField.LAST_NAME, fields),
-                                phoneNumbers = if (ContactField.PHONE_NUMBERS in fields)
-                                    cnContact.getPhoneNumbers()
-                                else
-                                    emptyList(),
-                                avatar = getAvatar(cnContact, fields)
+                // return contacts
+                buildList {
+                    store.enumerateContactsWithFetchRequest(request, error = null) { cnContact, _ ->
+                        cnContact?.let {
+                            add(
+                                Contact(
+                                    id = getValue(cnContact, ContactField.ID, fields),
+                                    firstName = getValue(cnContact, ContactField.FIRST_NAME, fields),
+                                    lastName = getValue(cnContact, ContactField.LAST_NAME, fields),
+                                    phoneNumbers = if (ContactField.PHONE_NUMBERS in fields)
+                                        cnContact.getPhoneNumbers()
+                                    else
+                                        emptyList(),
+                                    avatar = getAvatar(cnContact, fields)
+                                )
                             )
-                        )
+                        }
                     }
                 }
+            }  catch (e: Exception) {
+                throw FetchContactsFailedException()
             }
 
         }
