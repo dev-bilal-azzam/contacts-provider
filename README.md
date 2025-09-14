@@ -17,7 +17,9 @@ A **Kotlin Multiplatform library** to fetch user contacts from **Android** and *
   - `avatar` (`URI` or `ImageBitmap`)  
 - **Compose-ready**: use `rememberContactsProvider()` directly in your composable screen.  
 - Works seamlessly in **Kotlin Multiplatform projects**.  
-- Minimal setup — no need to configure entry points manually.
+- Minimal setup :
+   — no need to configure entry points manually.
+   — ready to be injected via Dependency Injection Framework **Koin**.
 
 ---
 
@@ -91,6 +93,58 @@ fun ContactsScreen() {
     }
 }
 
+```
+
+---
+
+## Usage with Koin
+
+```kotlin
+// Common
+import com.bilalazzam.contacts_provider.ContactsProvider
+import org.koin.core.scope.Scope
+
+// create an expect function to create ContactsProvider
+expect fun Scope.createContactsProvider(): ContactsProvider
+```
+then create the actual implementation for each platform
+
+```kotlin
+// Android
+import com.bilalazzam.contacts_provider.ContactsProviderFactory
+
+actual fun Scope.createContactsProvider(): ContactsProvider {
+    return ContactsProviderFactory(this.get()).createContactsProvider()
+}
+
+
+// Ios
+actual fun Scope.createContactsProvider(): ContactsProvider {
+    return ContactsProviderFactory().createContactsProvider()
+}
+```
+
+then in koin module
+
+```kotlin
+import org.koin.dsl.module
+
+val dataProviderModule = module {
+    single { createContactsProvider() }
+}
+```
+the just inject it to your Repository or Datasource
+
+```kotlin
+class ContactsRepositoryImpl(
+    private val contactsProvider: ContactsProvider
+) : ContactsRepository {
+    private suspend fun getDeviceContacts(): List<DeviceContact> {
+        return contactsProvider.getAllContacts(
+            fields = setOf(ID, FIRST_NAME, LAST_NAME, PHONE_NUMBERS)
+        )
+    }
+}
 ```
 
 ## Needed Permissions
