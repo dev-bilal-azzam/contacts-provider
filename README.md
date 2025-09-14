@@ -42,7 +42,7 @@ dependencies {
 - Users can now specify exactly which fields they need:
   - **Phone numbers**  
   - **Names (first - last)**  
-  - **Avatar **  
+  - **Avatar**  
 - This avoids unnecessary queries and improves performance when only a subset of data is required.  
 
 ```kotlin
