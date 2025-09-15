@@ -15,6 +15,7 @@ import platform.Contacts.CNContactPhoneNumbersKey
 import platform.Contacts.CNContactStore
 import platform.Contacts.CNLabeledValue
 import platform.Contacts.CNPhoneNumber
+import platform.Foundation.valueForKey
 import platform.UIKit.UIImage
 
 class IosContactsProvider : ContactsProvider {
@@ -42,7 +43,11 @@ class IosContactsProvider : ContactsProvider {
                             add(
                                 Contact(
                                     id = getValue(cnContact, ContactField.ID, fields),
-                                    firstName = getValue(cnContact, ContactField.FIRST_NAME, fields),
+                                    firstName = getValue(
+                                        cnContact,
+                                        ContactField.FIRST_NAME,
+                                        fields
+                                    ),
                                     lastName = getValue(cnContact, ContactField.LAST_NAME, fields),
                                     phoneNumbers = if (ContactField.PHONE_NUMBERS in fields)
                                         cnContact.getPhoneNumbers()
@@ -54,7 +59,7 @@ class IosContactsProvider : ContactsProvider {
                         }
                     }
                 }
-            }  catch (e: Exception) {
+            } catch (e: Exception) {
                 throw FetchContactsFailedException()
             }
 
@@ -62,7 +67,10 @@ class IosContactsProvider : ContactsProvider {
 
     private fun CNContact.getPhoneNumbers(): List<String> {
         return phoneNumbers.mapNotNull { labeledValue ->
-            (labeledValue as? CNLabeledValue)?.value.let { it as? CNPhoneNumber }?.stringValue
+            val formattedNumber =
+                (labeledValue as? CNLabeledValue)?.value.let { it as? CNPhoneNumber }
+                    ?.valueForKey("digits") as? String
+            formattedNumber?.replace(" ", "")
         }
     }
 

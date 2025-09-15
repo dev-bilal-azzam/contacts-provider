@@ -47,6 +47,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.androidx.core.ktx)
+                implementation(libs.libphonenumber)
             }
         }
 

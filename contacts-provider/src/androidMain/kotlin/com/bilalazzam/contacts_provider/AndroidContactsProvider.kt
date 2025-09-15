@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
+import com.bilalazzam.contacts_provider.utils.removeCountryCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -51,7 +52,7 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
                     }
                 } ?: emptyList()
             } catch (e: SecurityException) {
-                throw  ContactsPermissionDeniedException()
+                throw ContactsPermissionDeniedException()
             } catch (e: Exception) {
                 throw FetchContactsFailedException()
             }
@@ -97,14 +98,16 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
             null,
             null
         )?.use { cursor ->
-            val idIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
-            val numberIndex = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+            val idIndex =
+                cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+            val numberIndex =
+                cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
 
             while (cursor.moveToNext()) {
                 val contactId = cursor.getString(idIndex)
-                val number = cursor.getString(numberIndex)
-
-                numbersByContact.getOrPut(contactId) { mutableListOf() }.add(number)
+                val number = cursor.getString(numberIndex).replace(" ", "")
+                val formattedNumber = removeCountryCode(number)
+                numbersByContact.getOrPut(contactId) { mutableListOf() }.add(formattedNumber)
             }
         }
 
