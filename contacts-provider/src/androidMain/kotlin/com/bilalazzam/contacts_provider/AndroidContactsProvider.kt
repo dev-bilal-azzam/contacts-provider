@@ -105,7 +105,7 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
 
             while (cursor.moveToNext()) {
                 val contactId = cursor.getString(idIndex)
-                val number = cursor.getString(numberIndex).replace(" ", "")
+                val number = cursor.getString(numberIndex)
                 val formattedNumber = formatPhoneNumber(number)
                 numbersByContact.getOrPut(contactId) { mutableListOf() }.add(formattedNumber)
             }
