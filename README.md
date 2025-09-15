@@ -2,7 +2,7 @@
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.2.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-purple.svg?logo=jetpack-compose)](https://www.jetbrains.com/lp/compose)  
-![Maven Central](https://img.shields.io/maven-central/v/io.github.dev-bilal-azzam/contacts-provider)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dev-bilal-azzam/contacts-provider)](https://central.sonatype.com/artifact/io.github.dev-bilal-azzam/contacts-provider)
 [![Build](https://github.com/dev-bilal-azzam/contacts-provider/actions/workflows/build.yml/badge.svg)](https://github.com/dev-bilal-azzam/contacts-provider/actions/workflows/build.yml)
 ![License](https://img.shields.io/github/license/dev-bilal-azzam/contacts-provider)
 
