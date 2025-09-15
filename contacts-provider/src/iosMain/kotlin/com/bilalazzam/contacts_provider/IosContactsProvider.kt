@@ -1,6 +1,7 @@
 package com.bilalazzam.contacts_provider
 
 
+import com.bilalazzam.contacts_provider.utils.formatPhoneNumber
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -59,7 +60,7 @@ class IosContactsProvider : ContactsProvider {
                         }
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 throw FetchContactsFailedException()
             }
 
@@ -67,10 +68,10 @@ class IosContactsProvider : ContactsProvider {
 
     private fun CNContact.getPhoneNumbers(): List<String> {
         return phoneNumbers.mapNotNull { labeledValue ->
-            val formattedNumber =
+            val phone =
                 (labeledValue as? CNLabeledValue)?.value.let { it as? CNPhoneNumber }
                     ?.valueForKey("digits") as? String
-            formattedNumber?.replace(" ", "")
+            phone?.let { formatPhoneNumber(it) }
         }
     }
 
