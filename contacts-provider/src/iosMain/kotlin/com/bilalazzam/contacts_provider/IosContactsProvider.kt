@@ -2,6 +2,7 @@ package com.bilalazzam.contacts_provider
 
 
 import com.bilalazzam.contacts_provider.utils.formatPhoneNumber
+import com.bilalazzam.contacts_provider.utils.mergeDuplicates
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -59,7 +60,7 @@ class IosContactsProvider : ContactsProvider {
                             )
                         }
                     }
-                }
+                }.mergeDuplicates()
             } catch (_: Exception) {
                 throw FetchContactsFailedException()
             }

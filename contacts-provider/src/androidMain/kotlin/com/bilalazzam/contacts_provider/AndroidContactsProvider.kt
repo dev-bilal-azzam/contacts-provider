@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
 import com.bilalazzam.contacts_provider.utils.formatPhoneNumber
+import com.bilalazzam.contacts_provider.utils.mergeDuplicates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -49,7 +50,7 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
                             )
                             add(contactWithPhoneNumbers)
                         }
-                    }
+                    }.mergeDuplicates()
                 } ?: emptyList()
             } catch (_: SecurityException) {
                 throw ContactsPermissionDeniedException()
