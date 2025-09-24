@@ -60,7 +60,7 @@ class IosContactsProvider : ContactsProvider {
                             )
                         }
                     }
-                }.mergeDuplicates()
+                }.mergeDuplicates().filter { it.phoneNumbers.isNotEmpty() }
             } catch (_: Exception) {
                 throw FetchContactsFailedException()
             }
@@ -73,7 +73,7 @@ class IosContactsProvider : ContactsProvider {
                 (labeledValue as? CNLabeledValue)?.value.let { it as? CNPhoneNumber }
                     ?.valueForKey("digits") as? String
             phone?.let { formatPhoneNumber(it) }
-        }
+        }.filter { it.isNotBlank() }
     }
 
     private fun getValue(

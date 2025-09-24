@@ -50,7 +50,7 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
                             )
                             add(contactWithPhoneNumbers)
                         }
-                    }.mergeDuplicates()
+                    }.mergeDuplicates().filter { it.phoneNumbers.isNotEmpty() }
                 } ?: emptyList()
             } catch (_: SecurityException) {
                 throw ContactsPermissionDeniedException()
@@ -108,7 +108,10 @@ class AndroidContactsProvider(private val context: Context) : ContactsProvider {
                 val contactId = cursor.getString(idIndex)
                 val number = cursor.getString(numberIndex)
                 val formattedNumber = formatPhoneNumber(number)
-                numbersByContact.getOrPut(contactId) { mutableListOf() }.add(formattedNumber)
+                if (formattedNumber.isNotBlank()) {
+                    numbersByContact.getOrPut(contactId) { mutableListOf() }.add(formattedNumber)
+                }
+
             }
         }
 
