@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "contacts-provider"
-include(":contacts-provider")
+rootProject.name = "kontacts"
+include(":kontacts")

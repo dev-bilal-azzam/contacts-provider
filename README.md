@@ -1,10 +1,10 @@
-# Contacts Provider (Kotlin Multiplatform)
+# Kontacts (Kotlin Multiplatform)
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.2.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-purple.svg?logo=jetpack-compose)](https://www.jetbrains.com/lp/compose)  
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.dev-bilal-azzam/contacts-provider)](https://central.sonatype.com/artifact/io.github.dev-bilal-azzam/contacts-provider)
-[![Build](https://github.com/dev-bilal-azzam/contacts-provider/actions/workflows/build.yml/badge.svg)](https://github.com/dev-bilal-azzam/contacts-provider/actions/workflows/build.yml)
-![License](https://img.shields.io/github/license/dev-bilal-azzam/contacts-provider)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dev-bilal-azzam/kontacts)](https://central.sonatype.com/artifact/io.github.dev-bilal-azzam/kontacts)
+[![Build](https://github.com/dev-bilal-azzam/kontacts/actions/workflows/build.yml/badge.svg)](https://github.com/dev-bilal-azzam/kontacts/actions/workflows/build.yml)
+![License](https://img.shields.io/github/license/dev-bilal-azzam/kontacts)
 
 A **Kotlin Multiplatform library** to fetch user contacts from **Android** and **iOS** with a **Compose-friendly API**. Provides names, initials, phone numbers, and avatars, with minimal setup.
 
@@ -30,15 +30,15 @@ A **Kotlin Multiplatform library** to fetch user contacts from **Android** and *
 
 ### Gradle
 
- [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/contacts-provider?label=latest_version)](https://github.com/dev-bilal-azzam/contacts-provider/releases/latest)
+ [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/kontacts?label=latest_version)](https://github.com/dev-bilal-azzam/kontacts/releases/latest)
 ```kotlin
 dependencies {
-    implementation("io.github.dev-bilal-azzam:contacts-provider:$latest_version")
+    implementation("io.github.dev-bilal-azzam:kontacts:$latest_version")
 }
 ```
 
 
-# ✨ What’s New in [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/contacts-provider?label=Latest_Release)](https://github.com/dev-bilal-azzam/contacts-provider/releases/latest)
+# ✨ What’s New in [![Latest Release](https://img.shields.io/github/v/release/dev-bilal-azzam/kontacts?label=Latest_Release)](https://github.com/dev-bilal-azzam/kontacts/releases/latest)
 
 ### 1. Customizable Fields  
 - Introduced **custom field selection** when fetching contacts.  
