@@ -1,4 +1,4 @@
-name: Build Contacts Provider
+name: Build Kontacts
 
 on:
   workflow_dispatch:
