@@ -1,5 +1,6 @@
 [versions]
 agp = "8.10.1"
+kontacts = "1.2.1"
 kotlin = "2.2.10"
 android-minSdk = "24"
 android-compileSdk = "36"
@@ -16,6 +17,7 @@ androidx-lifecycle = "2.9.3"
 
 
 [libraries]
+kontacts = { module = "io.github.dev-bilal-azzam:kontacts", version.ref = "kontacts" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }

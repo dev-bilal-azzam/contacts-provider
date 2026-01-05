@@ -30,8 +30,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":kontacts-core"))
-                implementation(project(":kontacts-compose"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -47,6 +45,8 @@ kotlin {
                 api(libs.moko.permissions.compose)
 
                 implementation(libs.coil.compose)
+
+                implementation(libs.kontacts)
             }
         }
 
