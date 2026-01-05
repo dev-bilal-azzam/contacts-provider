@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bilalazzam.kontacts.compose.rememberContactsProvider
 import com.bilalazzam.kontacts.sample.di.dependencies
 import dev.icerock.moko.permissions.PermissionState
 import dev.icerock.moko.permissions.compose.BindEffect
@@ -32,7 +33,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun ContactsScreen() {
+    // to be used in di modules or data modules like repositories
     val contactsProvider = dependencies.contactsProvider
+
+    // to be used directly in compose
+    // val contactsProvider = rememberContactsProvider()
     MaterialTheme {
         val factory = rememberPermissionsControllerFactory()
         val controller = remember(factory) {

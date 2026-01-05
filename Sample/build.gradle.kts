@@ -30,7 +30,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":kontacts"))
+                implementation(project(":kontacts-core"))
+                implementation(project(":kontacts-compose"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
