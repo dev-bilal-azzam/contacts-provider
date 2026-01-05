@@ -174,5 +174,5 @@ See the [LICENSE](LICENSE) file for details.
 ---
 ### 💻 Contributors
 
-[![](https://contrib.rocks/image?repo=dev-bilal-azzam/MyContacts)](https://github.com/dev-bilal-azzam/MyContacts/graphs/contributors)
+[![](https://contrib.rocks/image?repo=dev-bilal-azzam/Kontacts)](https://github.com/dev-bilal-azzam/Kontacts/graphs/contributors)
 
