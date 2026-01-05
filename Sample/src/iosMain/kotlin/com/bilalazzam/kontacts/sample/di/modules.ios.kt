@@ -2,8 +2,8 @@
 
 package com.bilalazzam.kontacts.sample.di
 
-import com.bilalazzam.kontacts.api.ContactsProvider
-import com.bilalazzam.kontacts.internal.factory.ContactsProviderFactory
+import com.bilalazzam.kontacts.core.ContactsProvider
+import com.bilalazzam.kontacts.core.ContactsProviderFactory
 
 actual class Dependencies {
     actual val contactsProvider: ContactsProvider = ContactsProviderFactory().createContactsProvider()

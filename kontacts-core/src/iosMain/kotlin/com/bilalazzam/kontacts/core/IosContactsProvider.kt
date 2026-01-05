@@ -1,6 +1,5 @@
-package com.bilalazzam.kontacts.api
+package com.bilalazzam.kontacts.core
 
-import com.bilalazzam.kontacts.core.*
 import com.bilalazzam.kontacts.internal.utils.*
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers

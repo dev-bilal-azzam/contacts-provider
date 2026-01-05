@@ -2,7 +2,7 @@ package com.bilalazzam.kontacts.internal.utils
 
 import com.bilalazzam.kontacts.core.Contact
 
-fun List<Contact>.mergeDuplicates(): List<Contact> {
+internal fun List<Contact>.mergeDuplicates(): List<Contact> {
     return this
         .groupBy { it.displayName }
         .map { (_, group) ->

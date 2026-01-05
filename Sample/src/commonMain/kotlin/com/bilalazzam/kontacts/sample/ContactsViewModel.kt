@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bilalazzam.kontacts.core.*
-import com.bilalazzam.kontacts.api.ContactsProvider
+import com.bilalazzam.kontacts.core.ContactsProvider
 import com.bilalazzam.kontacts.core.ContactField.*
 import dev.icerock.moko.permissions.DeniedAlwaysException
 import dev.icerock.moko.permissions.DeniedException

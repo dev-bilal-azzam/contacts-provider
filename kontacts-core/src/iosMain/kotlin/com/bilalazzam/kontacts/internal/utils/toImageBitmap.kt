@@ -71,7 +71,7 @@ private fun UIImage.toSkiaImage(): Image? {
     )
 }
 
-fun UIImage.toImageBitmap(): ImageBitmap {
+internal fun UIImage.toImageBitmap(): ImageBitmap {
     val skiaImage = this.toSkiaImage() ?: return ImageBitmap(1, 1)
     return skiaImage.toComposeImageBitmap()
 }

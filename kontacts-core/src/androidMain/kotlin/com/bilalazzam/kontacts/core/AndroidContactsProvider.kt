@@ -1,10 +1,9 @@
-package com.bilalazzam.kontacts.api
+package com.bilalazzam.kontacts.core
 
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
-import com.bilalazzam.kontacts.core.*
 import com.bilalazzam.kontacts.internal.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
