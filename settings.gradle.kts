@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "kontacts"
 include(":kontacts")
+include(":kontacts-core")
+include(":kontacts-compose")
