@@ -48,7 +48,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation(libs.androidx.core.ktx)
+                api(libs.androidx.core.ktx)
             }
         }
 
