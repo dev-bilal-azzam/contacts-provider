@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "io.github.dev-bilal-azzam"
-version = project.findProperty("version") as String? ?: "1.1.1"
+version = project.findProperty("version") as String? ?: "1.2.1"
 
 
 kotlin {
@@ -28,7 +28,7 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
-            baseName = "kontacts"
+            baseName = "kontacts-compose"
             isStatic = true
         }
     }
@@ -36,8 +36,9 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(libs.kotlin.stdlib)
+                implementation(compose.ui)
                 api(project(":kontacts-core"))
-                api(project(":kontacts-compose"))
             }
         }
         val commonTest by getting {
@@ -47,7 +48,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-
+                implementation(libs.androidx.core.ktx)
             }
         }
 
@@ -65,7 +66,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.bilalazzam.kontacts"
+    namespace = "com.bilalazzam.kontacts.compose"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -82,12 +83,12 @@ mavenPublishing {
     publishToMavenCentral()
     signAllPublications()
 
-    coordinates(group.toString(), "kontacts", version.toString())
+    coordinates(group.toString(), "kontacts-compose", version.toString())
 
     pom {
-        name = "Kontacts"
-        description = "Kotlin Multiplatform contacts provider for Android and iOS."
-        inceptionYear = "2025"
+        name = "Kontacts Compose"
+        description = "Compose UI utilities for Kotlin Multiplatform Contacts library Kontacts."
+        inceptionYear = "2026"
         url = "https://github.com/dev-bilal-azzam/kontacts/"
 
         licenses {
@@ -102,12 +103,6 @@ mavenPublishing {
                 id = "dev-bilal-azzam"
                 name = "Bilal Azzam"
                 url = "https://www.linkedin.com/in/dev-bilal-azzam/"
-            }
-
-            developer {
-                id = "Radwa85"
-                name = "Radwa Mohamed"
-                url = "https://www.linkedin.com/in/radwa-mohamed-250215288/"
             }
         }
 
