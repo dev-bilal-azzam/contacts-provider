@@ -1,10 +1,13 @@
 package com.bilalazzam.kontacts.core
 
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.bilalazzam.kontacts.internal.utils.*
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import org.jetbrains.skia.Image
+import org.jetbrains.skia.makeFromEncoded
 import platform.Contacts.CNContact
 import platform.Contacts.CNContactFamilyNameKey
 import platform.Contacts.CNContactFetchRequest
@@ -16,7 +19,6 @@ import platform.Contacts.CNContactStore
 import platform.Contacts.CNLabeledValue
 import platform.Contacts.CNPhoneNumber
 import platform.Foundation.valueForKey
-import platform.UIKit.UIImage
 
 class IosContactsProvider : ContactsProvider {
 
@@ -92,7 +94,11 @@ class IosContactsProvider : ContactsProvider {
         if (ContactField.AVATAR !in fields) return ContactAvatar.None
         val imageData = cnContact.imageData
         return if (imageData != null)
-            ContactAvatar.AvatarBitmap(UIImage(data = imageData).toImageBitmap())
+            ContactAvatar.AvatarBitmap(
+                Image
+                    .makeFromEncoded(imageData)
+                    .toComposeImageBitmap()
+            )
         else
             ContactAvatar.None
     }
